@@ -25,6 +25,14 @@ document.getElementById('pullB').addEventListener('click', () => {
 
 document.getElementById('reset').addEventListener('click', resetGame);
 
+document.getElementById('teamAColor').addEventListener('input', (event) => {
+    document.getElementById('teamA').style.backgroundColor = event.target.value;
+});
+
+document.getElementById('teamBColor').addEventListener('input', (event) => {
+    document.getElementById('teamB').style.backgroundColor = event.target.value;
+});
+
 function updateRopePosition() {
     const rope = document.getElementById('rope');
     rope.style.marginLeft = `${ropePosition}%`;
@@ -85,23 +93,25 @@ function declareWinner(winner) {
         teamB.classList.add('winner');
         teamA.classList.add('loser');
     }
-
-    document.getElementById('scoreA').textContent = `${teamAName}: ${scoreA}`;
-    document.getElementById('scoreB').textContent = `${teamBName}: ${scoreB}`;
-    setTimeout(resetGame, 2000);
+    updateScores();
+    resetGame();
 }
 
 function declareTie() {
-    alert('It\'s a tie!');
-    addGameToHistory('It\'s a tie!');
-    setTimeout(resetGame, 2000);
+    alert('It\'s a Tie!');
+    addGameToHistory('It\'s a Tie!');
+    resetGame();
+}
+
+function updateScores() {
+    document.getElementById('scoreA').textContent = `Team A: ${scoreA}`;
+    document.getElementById('scoreB').textContent = `Team B: ${scoreB}`;
 }
 
 function resetGame() {
     ropePosition = 50;
-    clearInterval(timerInterval);
-    startTimer();
     updateRopePosition();
+    startTimer();
     document.getElementById('teamA').classList.remove('winner', 'loser');
     document.getElementById('teamB').classList.remove('winner', 'loser');
 }

@@ -68,6 +68,7 @@ body {
 .team {
     width: 100px;
     text-align: center;
+    transition: background-color 0.3s ease;
 }
 
 .pull-settings {
@@ -138,4 +139,11 @@ button:hover {
 
 .hidden {
     display: none;
+}
+
+.team-customization {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
 }
