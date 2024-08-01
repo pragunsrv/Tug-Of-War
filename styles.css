@@ -37,10 +37,23 @@ body {
     border: 2px solid #000;
     padding: 20px;
     margin-bottom: 20px;
+    position: relative;
 }
 
 .team-name-input {
     margin-bottom: 10px;
+}
+
+.rope-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.progress {
+    width: 45%;
+    height: 50px;
+    background-color: lightgray;
 }
 
 .rope {
@@ -52,6 +65,10 @@ body {
 .team {
     width: 100px;
     text-align: center;
+}
+
+.pull-settings {
+    margin-bottom: 10px;
 }
 
 button {

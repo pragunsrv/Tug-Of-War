@@ -25,9 +25,19 @@
             <label for="teamBName">Team B Name: </label>
             <input type="text" id="teamBName" value="Team B">
         </div>
-        <div class="rope" id="rope"></div>
+        <div class="rope-container">
+            <div class="progress" id="progressA"></div>
+            <div class="rope" id="rope"></div>
+            <div class="progress" id="progressB"></div>
+        </div>
         <div class="team" id="teamA">Team A</div>
         <div class="team" id="teamB">Team B</div>
+    </div>
+    <div class="pull-settings">
+        <label for="pullStrengthA">Pull Strength Team A: </label>
+        <input type="number" id="pullStrengthA" value="1">
+        <label for="pullStrengthB">Pull Strength Team B: </label>
+        <input type="number" id="pullStrengthB" value="1">
     </div>
     <button id="pullA">Pull Team A</button>
     <button id="pullB">Pull Team B</button>

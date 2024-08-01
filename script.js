@@ -5,15 +5,19 @@ let timer = 60;
 let timerInterval;
 
 document.getElementById('pullA').addEventListener('click', () => {
+    const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
     if (ropePosition > 0) {
-        ropePosition--;
+        ropePosition -= pullStrengthA;
+        if (ropePosition < 0) ropePosition = 0;
         updateRopePosition();
     }
 });
 
 document.getElementById('pullB').addEventListener('click', () => {
+    const pullStrengthB = parseInt(document.getElementById('pullStrengthB').value, 10);
     if (ropePosition < 100) {
-        ropePosition++;
+        ropePosition += pullStrengthB;
+        if (ropePosition > 100) ropePosition = 100;
         updateRopePosition();
     }
 });
@@ -23,6 +27,12 @@ document.getElementById('reset').addEventListener('click', resetGame);
 function updateRopePosition() {
     const rope = document.getElementById('rope');
     rope.style.marginLeft = `${ropePosition}%`;
+
+    const progressA = document.getElementById('progressA');
+    const progressB = document.getElementById('progressB');
+
+    progressA.style.width = `${ropePosition}%`;
+    progressB.style.width = `${100 - ropePosition}%`;
 
     if (ropePosition === 0) {
         alert(`${document.getElementById('teamAName').value} Wins!`);
