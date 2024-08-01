@@ -1,4 +1,4 @@
-/* Existing styles with added styling for leaderboard */
+/* Existing styles with additional styling for enhanced leaderboard and multi-round indicators */
 body {
     display: flex;
     flex-direction: column;
@@ -174,4 +174,9 @@ button:hover {
     padding: 10px;
     margin: 5px 0;
     text-align: center;
+}
+
+.multi-round-indicator {
+    font-size: 1.2em;
+    margin-top: 20px;
 }

@@ -10,9 +10,11 @@ let stats = {
     totalGames: 0,
     gamesWonA: 0,
     gamesWonB: 0,
-    ties: 0
+    ties: 0,
+    rounds: 0
 };
 let leaderboard = [];
+let multiRoundMode = false;
 
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
@@ -159,6 +161,9 @@ function resetGame() {
     startTimer();
     document.getElementById('teamA').classList.remove('winner', 'loser');
     document.getElementById('teamB').classList.remove('winner', 'loser');
+    if (multiRoundMode) {
+        stats.rounds++;
+    }
 }
 
 function addGameToHistory(result) {
@@ -191,6 +196,10 @@ function triggerPowerUp() {
     } else if (currentPowerUp === 'boost') {
         ropePosition += 30; // Boosted pull
         if (ropePosition > 100) ropePosition = 100;
+    } else if (currentPowerUp === 'swap') {
+        const temp = document.getElementById('pullStrengthA').value;
+        document.getElementById('pullStrengthA').value = document.getElementById('pullStrengthB').value;
+        document.getElementById('pullStrengthB').value = temp;
     }
 
     updateRopePosition();
@@ -205,6 +214,7 @@ function displayStats() {
         <p>Games Won by Team A: ${stats.gamesWonA}</p>
         <p>Games Won by Team B: ${stats.gamesWonB}</p>
         <p>Ties: ${stats.ties}</p>
+        <p>Total Rounds: ${stats.rounds}</p>
     `;
 }
 
