@@ -5,6 +5,12 @@ let timer = 60;
 let timerInterval;
 let gameHistory = [];
 let currentPowerUp = 'none';
+let stats = {
+    totalGames: 0,
+    gamesWonA: 0,
+    gamesWonB: 0,
+    ties: 0
+};
 
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
@@ -58,18 +64,19 @@ function updateRopePosition() {
 function startTimer() {
     timer = parseInt(document.getElementById('timerInput').value, 10);
     document.getElementById('timer').textContent = `Time: ${timer}`;
+    
+    clearInterval(timerInterval);
     timerInterval = setInterval(() => {
-        if (timer > 0) {
-            timer--;
-            document.getElementById('timer').textContent = `Time: ${timer}`;
-        } else {
+        timer--;
+        document.getElementById('timer').textContent = `Time: ${timer}`;
+        if (timer <= 0) {
             clearInterval(timerInterval);
-            determineWinner();
+            declareTimeout();
         }
     }, 1000);
 }
 
-function determineWinner() {
+function declareTimeout() {
     if (ropePosition === 0) {
         alert('Team A Wins by default due to timeout!');
         scoreA++;
@@ -96,12 +103,14 @@ function declareWinner(team) {
     if (team === 'A') {
         alert(`${teamAName} Wins!`);
         scoreA++;
+        stats.gamesWonA++;
         addGameToHistory(`${teamAName} Wins!`);
         document.getElementById('teamA').classList.add('winner');
         document.getElementById('teamB').classList.add('loser');
     } else {
         alert(`${teamBName} Wins!`);
         scoreB++;
+        stats.gamesWonB++;
         addGameToHistory(`${teamBName} Wins!`);
         document.getElementById('teamB').classList.add('winner');
         document.getElementById('teamA').classList.add('loser');
@@ -112,6 +121,7 @@ function declareWinner(team) {
 
 function declareTie() {
     alert('It\'s a Tie!');
+    stats.ties++;
     addGameToHistory('It\'s a Tie!');
     resetGame();
 }
@@ -152,6 +162,9 @@ function triggerPowerUp() {
         if (ropePosition < 0) ropePosition = 0;
     } else if (currentPowerUp === 'reverse') {
         ropePosition = 100 - ropePosition;
+    } else if (currentPowerUp === 'double') {
+        ropePosition += 10; // Extra pull
+        if (ropePosition > 100) ropePosition = 100;
     }
 
     updateRopePosition();
@@ -159,4 +172,18 @@ function triggerPowerUp() {
 
 setInterval(triggerPowerUp, 10000);
 
+function displayStats() {
+    const statsDiv = document.getElementById('stats');
+    statsDiv.innerHTML = `
+        <p>Total Games: ${stats.totalGames}</p>
+        <p>Games Won by Team A: ${stats.gamesWonA}</p>
+        <p>Games Won by Team B: ${stats.gamesWonB}</p>
+        <p>Ties: ${stats.ties}</p>
+    `;
+}
+
+document.getElementById('teamAName').addEventListener('input', displayStats);
+document.getElementById('teamBName').addEventListener('input', displayStats);
+
 resetGame();
+displayStats();

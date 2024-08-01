@@ -141,15 +141,18 @@ button:hover {
     display: none;
 }
 
-.team-customization {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-}
-
-.power-up-effects {
+.team-customization, .power-up-effects {
     margin-top: 20px;
     width: 80%;
     text-align: center;
+}
+
+.game-stats {
+    margin-top: 20px;
+    width: 80%;
+    text-align: center;
+}
+
+#stats {
+    font-size: 1.2em;
 }
