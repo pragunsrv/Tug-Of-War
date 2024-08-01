@@ -7,85 +7,86 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="scoreboard">
-        <div class="score" id="scoreA">Team A: 0</div>
-        <div class="score" id="scoreB">Team B: 0</div>
-    </div>
-    <div class="timer-settings">
-        <label for="timerInput">Set Timer (seconds): </label>
-        <input type="number" id="timerInput" value="60">
-    </div>
-    <div class="timer" id="timer">Time: 60</div>
-    <div class="game-container">
-        <div class="team-name-input">
-            <label for="teamAName">Team A Name: </label>
-            <input type="text" id="teamAName" value="Team A">
+    <h1>Tug of War Game</h1>
+    <div class="settings">
+        <div>
+            <label for="teamAName">Team A Name:</label>
+            <input type="text" id="teamAName" placeholder="Team A">
         </div>
-        <div class="team-name-input">
-            <label for="teamBName">Team B Name: </label>
-            <input type="text" id="teamBName" value="Team B">
+        <div>
+            <label for="teamBName">Team B Name:</label>
+            <input type="text" id="teamBName" placeholder="Team B">
         </div>
-        <div class="rope-container">
-            <div class="progress" id="progressA"></div>
-            <div class="rope" id="rope"></div>
-            <div class="progress" id="progressB"></div>
+        <div>
+            <label for="pullStrengthA">Team A Strength:</label>
+            <input type="number" id="pullStrengthA" value="10" min="1" max="100">
         </div>
-        <div class="team" id="teamA">Team A</div>
-        <div class="team" id="teamB">Team B</div>
+        <div>
+            <label for="pullStrengthB">Team B Strength:</label>
+            <input type="number" id="pullStrengthB" value="10" min="1" max="100">
+        </div>
+        <div>
+            <label for="teamAColor">Team A Color:</label>
+            <input type="color" id="teamAColor" value="#ff0000">
+        </div>
+        <div>
+            <label for="teamBColor">Team B Color:</label>
+            <input type="color" id="teamBColor" value="#0000ff">
+        </div>
+        <div>
+            <label for="powerUpEffects">Power-Up Effects:</label>
+            <select id="powerUpEffects">
+                <option value="none">None</option>
+                <option value="speed">Speed</option>
+                <option value="slow">Slow</option>
+                <option value="reverse">Reverse</option>
+                <option value="double">Double</option>
+                <option value="boost">Boost</option>
+                <option value="swap">Swap</option>
+                <option value="random">Random</option>
+            </select>
+        </div>
+        <div>
+            <label for="difficulty">Difficulty:</label>
+            <select id="difficulty">
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <div>
+            <label for="multiRoundMode">Multi-Round Mode:</label>
+            <input type="checkbox" id="multiRoundMode">
+        </div>
+        <div>
+            <label for="timerInput">Game Timer (seconds):</label>
+            <input type="number" id="timerInput" value="60" min="10" max="300">
+        </div>
     </div>
-    <div class="pull-settings">
-        <label for="pullStrengthA">Pull Strength Team A: </label>
-        <input type="number" id="pullStrengthA" value="1">
-        <label for="pullStrengthB">Pull Strength Team B: </label>
-        <input type="number" id="pullStrengthB" value="1">
+    <div id="game">
+        <div id="teamA" class="team">
+            <h2 id="scoreA">Team A: 0</h2>
+            <button id="pullA">Pull A</button>
+            <div id="progressA" class="progress"></div>
+        </div>
+        <div id="teamB" class="team">
+            <h2 id="scoreB">Team B: 0</h2>
+            <button id="pullB">Pull B</button>
+            <div id="progressB" class="progress"></div>
+        </div>
+        <div id="rope"></div>
     </div>
-    <button id="pullA">Pull Team A</button>
-    <button id="pullB">Pull Team B</button>
-    <button id="reset">Reset Game</button>
-    <div class="history">
-        <h3>Game History</h3>
-        <ul id="gameHistory"></ul>
+    <div id="controls">
+        <button id="reset">Reset</button>
     </div>
-    <div id="powerUp" class="hidden">Power Up!</div>
-    <div class="team-customization">
-        <label for="teamAColor">Team A Color: </label>
-        <input type="color" id="teamAColor" value="#ff0000">
-        <label for="teamBColor">Team B Color: </label>
-        <input type="color" id="teamBColor" value="#0000ff">
-    </div>
-    <div class="power-up-effects">
-        <label for="powerUpEffects">Select Power-Up Effects: </label>
-        <select id="powerUpEffects">
-            <option value="none">None</option>
-            <option value="speed">Speed Boost</option>
-            <option value="slow">Slow Down</option>
-            <option value="reverse">Reverse</option>
-            <option value="double">Double Pull</option>
-            <option value="boost">Boost</option>
-            <option value="swap">Swap Strength</option>
-            <option value="random">Random Effect</option>
-        </select>
-    </div>
-    <div class="difficulty-settings">
-        <label for="difficulty">Select Difficulty Level: </label>
-        <select id="difficulty">
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="hard">Hard</option>
-        </select>
-    </div>
-    <div class="game-stats">
-        <h3>Game Stats</h3>
-        <div id="stats"></div>
-    </div>
-    <div class="leaderboard">
-        <h3>Leaderboard</h3>
-        <ul id="leaderboard"></ul>
-    </div>
-    <div class="multi-round-indicator">
-        <label for="multiRoundMode">Enable Multi-Round Mode: </label>
-        <input type="checkbox" id="multiRoundMode">
-    </div>
+    <div id="timer">Time: 60</div>
+    <div id="powerUp" class="hidden">Power Up Activated!</div>
+    <ul id="gameHistory"></ul>
+    <div id="stats"></div>
+    <ul id="leaderboard"></ul>
+    <audio id="pullSound" src="pull.mp3"></audio>
+    <audio id="winSound" src="win.mp3"></audio>
+    <audio id="specialEventSound" src="event.mp3"></audio>
     <script src="script.js"></script>
 </body>
 </html>
