@@ -12,12 +12,17 @@ body {
     display: flex;
     justify-content: space-between;
     width: 80%;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .score {
     font-size: 1.5em;
     font-weight: bold;
+}
+
+.timer {
+    font-size: 1.5em;
+    margin-bottom: 20px;
 }
 
 .game-container {
