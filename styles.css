@@ -1,3 +1,4 @@
+/* Existing styles with added styling for difficulty settings */
 body {
     display: flex;
     flex-direction: column;
@@ -21,7 +22,7 @@ body {
     font-weight: bold;
 }
 
-.timer-settings {
+.timer-settings, .difficulty-settings {
     margin-bottom: 10px;
 }
 
@@ -141,7 +142,7 @@ button:hover {
     display: none;
 }
 
-.team-customization, .power-up-effects {
+.team-customization, .power-up-effects, .difficulty-settings {
     margin-top: 20px;
     width: 80%;
     text-align: center;

@@ -5,6 +5,7 @@ let timer = 60;
 let timerInterval;
 let gameHistory = [];
 let currentPowerUp = 'none';
+let difficulty = 'easy';
 let stats = {
     totalGames: 0,
     gamesWonA: 0,
@@ -14,8 +15,9 @@ let stats = {
 
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
+    const effectiveStrengthA = adjustForDifficulty(pullStrengthA);
     if (ropePosition > 0) {
-        ropePosition -= pullStrengthA;
+        ropePosition -= effectiveStrengthA;
         if (ropePosition < 0) ropePosition = 0;
         updateRopePosition();
     }
@@ -23,8 +25,9 @@ document.getElementById('pullA').addEventListener('click', () => {
 
 document.getElementById('pullB').addEventListener('click', () => {
     const pullStrengthB = parseInt(document.getElementById('pullStrengthB').value, 10);
+    const effectiveStrengthB = adjustForDifficulty(pullStrengthB);
     if (ropePosition < 100) {
-        ropePosition += pullStrengthB;
+        ropePosition += effectiveStrengthB;
         if (ropePosition > 100) ropePosition = 100;
         updateRopePosition();
     }
@@ -44,20 +47,33 @@ document.getElementById('powerUpEffects').addEventListener('change', (event) => 
     currentPowerUp = event.target.value;
 });
 
-function updateRopePosition() {
-    const rope = document.getElementById('rope');
-    rope.style.marginLeft = `${ropePosition}%`;
+document.getElementById('difficulty').addEventListener('change', (event) => {
+    difficulty = event.target.value;
+});
 
+function adjustForDifficulty(strength) {
+    if (difficulty === 'medium') {
+        return strength * 1.5;
+    } else if (difficulty === 'hard') {
+        return strength * 2;
+    }
+    return strength;
+}
+
+function updateRopePosition() {
     const progressA = document.getElementById('progressA');
     const progressB = document.getElementById('progressB');
+    const rope = document.getElementById('rope');
 
-    progressA.style.width = `${ropePosition}%`;
-    progressB.style.width = `${100 - ropePosition}%`;
+    const progressWidth = (ropePosition / 100) * 100;
+    progressA.style.width = `${progressWidth}%`;
+    progressB.style.width = `${100 - progressWidth}%`;
+    rope.style.left = `${progressWidth}%`;
 
     if (ropePosition === 0) {
-        declareWinner('A');
-    } else if (ropePosition === 100) {
         declareWinner('B');
+    } else if (ropePosition === 100) {
+        declareWinner('A');
     }
 }
 
@@ -164,6 +180,9 @@ function triggerPowerUp() {
         ropePosition = 100 - ropePosition;
     } else if (currentPowerUp === 'double') {
         ropePosition += 10; // Extra pull
+        if (ropePosition > 100) ropePosition = 100;
+    } else if (currentPowerUp === 'boost') {
+        ropePosition += 30; // Boosted pull
         if (ropePosition > 100) ropePosition = 100;
     }
 
