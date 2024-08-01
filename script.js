@@ -12,6 +12,7 @@ let stats = {
     gamesWonB: 0,
     ties: 0
 };
+let leaderboard = [];
 
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
@@ -33,14 +34,8 @@ document.getElementById('pullB').addEventListener('click', () => {
     }
 });
 
-document.getElementById('reset').addEventListener('click', resetGame);
-
-document.getElementById('teamAColor').addEventListener('input', (event) => {
-    document.getElementById('teamA').style.backgroundColor = event.target.value;
-});
-
-document.getElementById('teamBColor').addEventListener('input', (event) => {
-    document.getElementById('teamB').style.backgroundColor = event.target.value;
+document.getElementById('reset').addEventListener('click', () => {
+    resetGame();
 });
 
 document.getElementById('powerUpEffects').addEventListener('change', (event) => {
@@ -49,6 +44,14 @@ document.getElementById('powerUpEffects').addEventListener('change', (event) => 
 
 document.getElementById('difficulty').addEventListener('change', (event) => {
     difficulty = event.target.value;
+});
+
+document.getElementById('teamAColor').addEventListener('input', (event) => {
+    document.getElementById('teamA').style.backgroundColor = event.target.value;
+});
+
+document.getElementById('teamBColor').addEventListener('input', (event) => {
+    document.getElementById('teamB').style.backgroundColor = event.target.value;
 });
 
 function adjustForDifficulty(strength) {
@@ -109,6 +112,7 @@ function declareTimeout() {
         declareTie();
     }
     updateScores();
+    updateLeaderboard();
     resetGame();
 }
 
@@ -132,6 +136,7 @@ function declareWinner(team) {
         document.getElementById('teamA').classList.add('loser');
     }
     updateScores();
+    updateLeaderboard();
     resetGame();
 }
 
@@ -139,6 +144,7 @@ function declareTie() {
     alert('It\'s a Tie!');
     stats.ties++;
     addGameToHistory('It\'s a Tie!');
+    updateLeaderboard();
     resetGame();
 }
 
@@ -161,6 +167,7 @@ function addGameToHistory(result) {
     listItem.textContent = result;
     historyList.appendChild(listItem);
     gameHistory.push(result);
+    stats.totalGames++;
 }
 
 function triggerPowerUp() {
@@ -199,6 +206,19 @@ function displayStats() {
         <p>Games Won by Team B: ${stats.gamesWonB}</p>
         <p>Ties: ${stats.ties}</p>
     `;
+}
+
+function updateLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboard');
+    leaderboardList.innerHTML = '';
+
+    const sortedLeaderboard = [...leaderboard].sort((a, b) => b.score - a.score);
+
+    sortedLeaderboard.forEach(entry => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${entry.team} - ${entry.score} points`;
+        leaderboardList.appendChild(listItem);
+    });
 }
 
 document.getElementById('teamAName').addEventListener('input', displayStats);
