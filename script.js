@@ -3,6 +3,7 @@ let scoreA = 0;
 let scoreB = 0;
 let timer = 60;
 let timerInterval;
+let gameHistory = [];
 
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
@@ -37,10 +38,12 @@ function updateRopePosition() {
     if (ropePosition === 0) {
         alert(`${document.getElementById('teamAName').value} Wins!`);
         scoreA++;
+        addGameToHistory(`${document.getElementById('teamAName').value} Wins!`);
         resetGame();
     } else if (ropePosition === 100) {
         alert(`${document.getElementById('teamBName').value} Wins!`);
         scoreB++;
+        addGameToHistory(`${document.getElementById('teamBName').value} Wins!`);
         resetGame();
     }
 
@@ -66,11 +69,14 @@ function determineWinner() {
     if (ropePosition < 50) {
         alert(`${document.getElementById('teamAName').value} Wins!`);
         scoreA++;
+        addGameToHistory(`${document.getElementById('teamAName').value} Wins!`);
     } else if (ropePosition > 50) {
         alert(`${document.getElementById('teamBName').value} Wins!`);
         scoreB++;
+        addGameToHistory(`${document.getElementById('teamBName').value} Wins!`);
     } else {
         alert('It\'s a tie!');
+        addGameToHistory('It\'s a tie!');
     }
     resetGame();
 }
@@ -80,6 +86,14 @@ function resetGame() {
     clearInterval(timerInterval);
     startTimer();
     updateRopePosition();
+}
+
+function addGameToHistory(result) {
+    gameHistory.push(result);
+    const historyList = document.getElementById('gameHistory');
+    const listItem = document.createElement('li');
+    listItem.textContent = result;
+    historyList.appendChild(listItem);
 }
 
 window.onload = startTimer;
