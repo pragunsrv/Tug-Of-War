@@ -24,6 +24,7 @@ let playerStats = {
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
     const effectiveStrengthA = adjustForDifficulty(pullStrengthA);
+    applyPowerUps('A');
     playSound('pullSound');
     if (ropePosition > 0) {
         ropePosition -= effectiveStrengthA;
@@ -35,6 +36,7 @@ document.getElementById('pullA').addEventListener('click', () => {
 document.getElementById('pullB').addEventListener('click', () => {
     const pullStrengthB = parseInt(document.getElementById('pullStrengthB').value, 10);
     const effectiveStrengthB = adjustForDifficulty(pullStrengthB);
+    applyPowerUps('B');
     playSound('pullSound');
     if (ropePosition < 100) {
         ropePosition += effectiveStrengthB;
@@ -79,6 +81,60 @@ function adjustForDifficulty(strength) {
         return strength * 2;
     }
     return strength;
+}
+
+function applyPowerUps(team) {
+    switch (currentPowerUp) {
+        case 'speed':
+            if (team === 'A') ropePosition -= 5;
+            else ropePosition += 5;
+            break;
+        case 'slow':
+            if (team === 'A') ropePosition += 5;
+            else ropePosition -= 5;
+            break;
+        case 'reverse':
+            if (team === 'A') ropePosition += 10;
+            else ropePosition -= 10;
+            break;
+        case 'double':
+            if (team === 'A') ropePosition -= 10;
+            else ropePosition += 10;
+            break;
+        case 'boost':
+            if (team === 'A') ropePosition -= 15;
+            else ropePosition += 15;
+            break;
+        case 'swap':
+            ropePosition = 100 - ropePosition;
+            break;
+        case 'random':
+            const randomShift = Math.random() < 0.5 ? -10 : 10;
+            ropePosition += randomShift;
+            break;
+        case 'freeze':
+            // Do nothing, freeze effect
+            break;
+        case 'halftime':
+            timer += 10;
+            break;
+        case 'superpull':
+            if (team === 'A') ropePosition -= 20;
+            else ropePosition += 20;
+            break;
+        case 'divide':
+            if (team === 'A') ropePosition -= 5;
+            else ropePosition += 5;
+            break;
+    }
+    if (ropePosition < 0) ropePosition = 0;
+    if (ropePosition > 100) ropePosition = 100;
+    updateRopePosition();
+}
+
+function playSound(id) {
+    const sound = document.getElementById(id);
+    if (sound) sound.play();
 }
 
 function updateRopePosition() {
@@ -207,41 +263,17 @@ function updateStats() {
         <p>Ties: ${stats.ties}</p>
         <p>Rounds: ${stats.rounds}</p>
     `;
-    updateLeaderboard();
-}
-
-function updateLeaderboard() {
-    const teamAName = document.getElementById('teamAName').value || 'Team A';
-    const teamBName = document.getElementById('teamBName').value || 'Team B';
-    leaderboard = [
-        { team: teamAName, wins: stats.gamesWonA },
-        { team: teamBName, wins: stats.gamesWonB }
-    ];
-    leaderboard.sort((a, b) => b.wins - a.wins);
-    const leaderboardList = document.getElementById('leaderboard');
-    leaderboardList.innerHTML = '';
-    leaderboard.forEach(entry => {
-        const listItem = document.createElement('li');
-        listItem.textContent = `${entry.team}: ${entry.wins} wins`;
-        leaderboardList.appendChild(listItem);
-    });
 }
 
 function displayStats() {
-    const statsPage = document.getElementById('statsPage');
-    statsPage.style.display = 'block';
-    const statsList = document.createElement('ul');
-    statsList.innerHTML = `
-        <li>Team A Wins: ${playerStats.teamA.wins}</li>
-        <li>Team A Losses: ${playerStats.teamA.losses}</li>
-        <li>Team A Ties: ${playerStats.teamA.ties}</li>
-        <li>Team B Wins: ${playerStats.teamB.wins}</li>
-        <li>Team B Losses: ${playerStats.teamB.losses}</li>
-        <li>Team B Ties: ${playerStats.teamB.ties}</li>
+    updateStats();
+    const playerStatsDiv = document.getElementById('playerStats');
+    playerStatsDiv.innerHTML = `
+        <p>Team A Wins: ${playerStats.teamA.wins}</p>
+        <p>Team A Losses: ${playerStats.teamA.losses}</p>
+        <p>Team A Ties: ${playerStats.teamA.ties}</p>
+        <p>Team B Wins: ${playerStats.teamB.wins}</p>
+        <p>Team B Losses: ${playerStats.teamB.losses}</p>
+        <p>Team B Ties: ${playerStats.teamB.ties}</p>
     `;
-    statsPage.innerHTML = '';
-    statsPage.appendChild(statsList);
 }
-
-// Initialize game
-resetGame();
