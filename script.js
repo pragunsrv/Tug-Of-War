@@ -4,6 +4,7 @@ let scoreB = 0;
 let timer = 60;
 let timerInterval;
 let gameHistory = [];
+let currentPowerUp = 'none';
 
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
@@ -31,6 +32,10 @@ document.getElementById('teamAColor').addEventListener('input', (event) => {
 
 document.getElementById('teamBColor').addEventListener('input', (event) => {
     document.getElementById('teamB').style.backgroundColor = event.target.value;
+});
+
+document.getElementById('powerUpEffects').addEventListener('change', (event) => {
+    currentPowerUp = event.target.value;
 });
 
 function updateRopePosition() {
@@ -65,33 +70,41 @@ function startTimer() {
 }
 
 function determineWinner() {
-    if (ropePosition < 50) {
-        declareWinner('A');
-    } else if (ropePosition > 50) {
-        declareWinner('B');
+    if (ropePosition === 0) {
+        alert('Team A Wins by default due to timeout!');
+        scoreA++;
+        addGameToHistory('Team A Wins by default due to timeout!');
+        document.getElementById('teamA').classList.add('winner');
+        document.getElementById('teamB').classList.add('loser');
+    } else if (ropePosition === 100) {
+        alert('Team B Wins by default due to timeout!');
+        scoreB++;
+        addGameToHistory('Team B Wins by default due to timeout!');
+        document.getElementById('teamB').classList.add('winner');
+        document.getElementById('teamA').classList.add('loser');
     } else {
         declareTie();
     }
+    updateScores();
+    resetGame();
 }
 
-function declareWinner(winner) {
-    const teamA = document.getElementById('teamA');
-    const teamB = document.getElementById('teamB');
-    const teamAName = document.getElementById('teamAName').value;
-    const teamBName = document.getElementById('teamBName').value;
+function declareWinner(team) {
+    const teamAName = document.getElementById('teamAName').value || 'Team A';
+    const teamBName = document.getElementById('teamBName').value || 'Team B';
 
-    if (winner === 'A') {
+    if (team === 'A') {
         alert(`${teamAName} Wins!`);
         scoreA++;
         addGameToHistory(`${teamAName} Wins!`);
-        teamA.classList.add('winner');
-        teamB.classList.add('loser');
+        document.getElementById('teamA').classList.add('winner');
+        document.getElementById('teamB').classList.add('loser');
     } else {
         alert(`${teamBName} Wins!`);
         scoreB++;
         addGameToHistory(`${teamBName} Wins!`);
-        teamB.classList.add('winner');
-        teamA.classList.add('loser');
+        document.getElementById('teamB').classList.add('winner');
+        document.getElementById('teamA').classList.add('loser');
     }
     updateScores();
     resetGame();
@@ -131,14 +144,16 @@ function triggerPowerUp() {
         powerUp.classList.add('hidden');
     }, 1000);
 
-    const randomEffect = Math.random() > 0.5 ? 'A' : 'B';
-    if (randomEffect === 'A') {
-        ropePosition -= 10;
-        if (ropePosition < 0) ropePosition = 0;
-    } else {
-        ropePosition += 10;
+    if (currentPowerUp === 'speed') {
+        ropePosition += 20;
         if (ropePosition > 100) ropePosition = 100;
+    } else if (currentPowerUp === 'slow') {
+        ropePosition -= 20;
+        if (ropePosition < 0) ropePosition = 0;
+    } else if (currentPowerUp === 'reverse') {
+        ropePosition = 100 - ropePosition;
     }
+
     updateRopePosition();
 }
 

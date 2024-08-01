@@ -147,3 +147,9 @@ button:hover {
     justify-content: space-between;
     width: 80%;
 }
+
+.power-up-effects {
+    margin-top: 20px;
+    width: 80%;
+    text-align: center;
+}
