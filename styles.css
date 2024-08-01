@@ -20,6 +20,10 @@ body {
     font-weight: bold;
 }
 
+.timer-settings {
+    margin-bottom: 10px;
+}
+
 .timer {
     font-size: 1.5em;
     margin-bottom: 20px;
@@ -33,6 +37,10 @@ body {
     border: 2px solid #000;
     padding: 20px;
     margin-bottom: 20px;
+}
+
+.team-name-input {
+    margin-bottom: 10px;
 }
 
 .rope {

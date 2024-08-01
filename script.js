@@ -25,20 +25,22 @@ function updateRopePosition() {
     rope.style.marginLeft = `${ropePosition}%`;
 
     if (ropePosition === 0) {
-        alert('Team A Wins!');
+        alert(`${document.getElementById('teamAName').value} Wins!`);
         scoreA++;
         resetGame();
     } else if (ropePosition === 100) {
-        alert('Team B Wins!');
+        alert(`${document.getElementById('teamBName').value} Wins!`);
         scoreB++;
         resetGame();
     }
 
-    document.getElementById('scoreA').textContent = `Team A: ${scoreA}`;
-    document.getElementById('scoreB').textContent = `Team B: ${scoreB}`;
+    document.getElementById('scoreA').textContent = `${document.getElementById('teamAName').value}: ${scoreA}`;
+    document.getElementById('scoreB').textContent = `${document.getElementById('teamBName').value}: ${scoreB}`;
 }
 
 function startTimer() {
+    timer = parseInt(document.getElementById('timerInput').value, 10);
+    document.getElementById('timer').textContent = `Time: ${timer}`;
     timerInterval = setInterval(() => {
         if (timer > 0) {
             timer--;
@@ -52,10 +54,10 @@ function startTimer() {
 
 function determineWinner() {
     if (ropePosition < 50) {
-        alert('Team A Wins!');
+        alert(`${document.getElementById('teamAName').value} Wins!`);
         scoreA++;
     } else if (ropePosition > 50) {
-        alert('Team B Wins!');
+        alert(`${document.getElementById('teamBName').value} Wins!`);
         scoreB++;
     } else {
         alert('It\'s a tie!');
@@ -65,11 +67,9 @@ function determineWinner() {
 
 function resetGame() {
     ropePosition = 50;
-    timer = 60;
     clearInterval(timerInterval);
-    document.getElementById('timer').textContent = `Time: ${timer}`;
-    updateRopePosition();
     startTimer();
+    updateRopePosition();
 }
 
 window.onload = startTimer;
