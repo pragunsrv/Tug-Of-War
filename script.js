@@ -107,11 +107,31 @@ function resetGame() {
 }
 
 function addGameToHistory(result) {
-    gameHistory.push(result);
     const historyList = document.getElementById('gameHistory');
     const listItem = document.createElement('li');
     listItem.textContent = result;
     historyList.appendChild(listItem);
+    gameHistory.push(result);
 }
 
-window.onload = startTimer;
+function triggerPowerUp() {
+    const powerUp = document.getElementById('powerUp');
+    powerUp.classList.remove('hidden');
+    setTimeout(() => {
+        powerUp.classList.add('hidden');
+    }, 1000);
+
+    const randomEffect = Math.random() > 0.5 ? 'A' : 'B';
+    if (randomEffect === 'A') {
+        ropePosition -= 10;
+        if (ropePosition < 0) ropePosition = 0;
+    } else {
+        ropePosition += 10;
+        if (ropePosition > 100) ropePosition = 100;
+    }
+    updateRopePosition();
+}
+
+setInterval(triggerPowerUp, 10000);
+
+resetGame();
