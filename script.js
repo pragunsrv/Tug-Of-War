@@ -16,6 +16,10 @@ let stats = {
     rounds: 0
 };
 let leaderboard = [];
+let playerStats = {
+    teamA: { wins: 0, losses: 0, ties: 0 },
+    teamB: { wins: 0, losses: 0, ties: 0 }
+};
 
 document.getElementById('pullA').addEventListener('click', () => {
     const pullStrengthA = parseInt(document.getElementById('pullStrengthA').value, 10);
@@ -64,6 +68,10 @@ document.getElementById('multiRoundMode').addEventListener('change', (event) => 
     resetGame();
 });
 
+document.getElementById('viewStats').addEventListener('click', () => {
+    displayStats();
+});
+
 function adjustForDifficulty(strength) {
     if (difficulty === 'medium') {
         return strength * 1.5;
@@ -74,14 +82,12 @@ function adjustForDifficulty(strength) {
 }
 
 function updateRopePosition() {
+    const rope = document.getElementById('rope');
     const progressA = document.getElementById('progressA');
     const progressB = document.getElementById('progressB');
-    const rope = document.getElementById('rope');
-
-    const progressWidth = (ropePosition / 100) * 100;
-    progressA.style.width = `${progressWidth}%`;
-    progressB.style.width = `${100 - progressWidth}%`;
-    rope.style.left = `${progressWidth}%`;
+    rope.style.left = `${ropePosition}%`;
+    progressA.style.width = `${50 - ropePosition / 2}%`;
+    progressB.style.width = `${50 + ropePosition / 2}%`;
 
     if (ropePosition === 0) {
         scoreA++;
@@ -99,13 +105,16 @@ function checkWinner() {
     if (ropePosition === 0) {
         winner = 'Team A';
         stats.gamesWonA++;
+        playerStats.teamA.wins++;
+        playerStats.teamB.losses++;
     } else if (ropePosition === 100) {
         winner = 'Team B';
         stats.gamesWonB++;
+        playerStats.teamB.wins++;
+        playerStats.teamA.losses++;
     }
 
     if (winner) {
-        playSound('winSound');
         alert(`${winner} wins!`);
         updateGameHistory(winner);
         if (multiRoundMode) {
@@ -148,12 +157,18 @@ function startTimer() {
             if (ropePosition < 50) {
                 scoreA++;
                 updateGameHistory('Team A');
+                playerStats.teamA.wins++;
+                playerStats.teamB.losses++;
             } else if (ropePosition > 50) {
                 scoreB++;
                 updateGameHistory('Team B');
+                playerStats.teamB.wins++;
+                playerStats.teamA.losses++;
             } else {
                 updateGameHistory('Tie');
                 stats.ties++;
+                playerStats.teamA.ties++;
+                playerStats.teamB.ties++;
             }
             checkWinner();
         }
@@ -166,13 +181,8 @@ function startSpecialEvent() {
         ropePosition += randomShift;
         if (ropePosition < 0) ropePosition = 0;
         if (ropePosition > 100) ropePosition = 100;
-        playSound('specialEventSound');
         updateRopePosition();
     }, 30000);
-}
-
-function playSound(soundId) {
-    document.getElementById(soundId).play();
 }
 
 function updateGameHistory(winner) {
@@ -215,6 +225,22 @@ function updateLeaderboard() {
         listItem.textContent = `${entry.team}: ${entry.wins} wins`;
         leaderboardList.appendChild(listItem);
     });
+}
+
+function displayStats() {
+    const statsPage = document.getElementById('statsPage');
+    statsPage.style.display = 'block';
+    const statsList = document.createElement('ul');
+    statsList.innerHTML = `
+        <li>Team A Wins: ${playerStats.teamA.wins}</li>
+        <li>Team A Losses: ${playerStats.teamA.losses}</li>
+        <li>Team A Ties: ${playerStats.teamA.ties}</li>
+        <li>Team B Wins: ${playerStats.teamB.wins}</li>
+        <li>Team B Losses: ${playerStats.teamB.losses}</li>
+        <li>Team B Ties: ${playerStats.teamB.ties}</li>
+    `;
+    statsPage.innerHTML = '';
+    statsPage.appendChild(statsList);
 }
 
 // Initialize game
