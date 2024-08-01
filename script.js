@@ -56,6 +56,11 @@ document.getElementById('teamBColor').addEventListener('input', (event) => {
     document.getElementById('teamB').style.backgroundColor = event.target.value;
 });
 
+document.getElementById('multiRoundMode').addEventListener('change', (event) => {
+    multiRoundMode = event.target.checked;
+    resetGame();
+});
+
 function adjustForDifficulty(strength) {
     if (difficulty === 'medium') {
         return strength * 1.5;
@@ -200,6 +205,11 @@ function triggerPowerUp() {
         const temp = document.getElementById('pullStrengthA').value;
         document.getElementById('pullStrengthA').value = document.getElementById('pullStrengthB').value;
         document.getElementById('pullStrengthB').value = temp;
+    } else if (currentPowerUp === 'random') {
+        const effects = ['speed', 'slow', 'reverse', 'double', 'boost', 'swap'];
+        const randomEffect = effects[Math.floor(Math.random() * effects.length)];
+        currentPowerUp = randomEffect;
+        triggerPowerUp();
     }
 
     updateRopePosition();

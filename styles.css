@@ -22,7 +22,7 @@ body {
     font-weight: bold;
 }
 
-.timer-settings, .difficulty-settings {
+.timer-settings, .difficulty-settings, .multi-round-indicator {
     margin-bottom: 10px;
 }
 
@@ -142,7 +142,7 @@ button:hover {
     display: none;
 }
 
-.team-customization, .power-up-effects, .difficulty-settings {
+.team-customization, .power-up-effects, .difficulty-settings, .multi-round-indicator {
     margin-top: 20px;
     width: 80%;
     text-align: center;
