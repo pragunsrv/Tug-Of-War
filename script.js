@@ -36,19 +36,10 @@ function updateRopePosition() {
     progressB.style.width = `${100 - ropePosition}%`;
 
     if (ropePosition === 0) {
-        alert(`${document.getElementById('teamAName').value} Wins!`);
-        scoreA++;
-        addGameToHistory(`${document.getElementById('teamAName').value} Wins!`);
-        resetGame();
+        declareWinner('A');
     } else if (ropePosition === 100) {
-        alert(`${document.getElementById('teamBName').value} Wins!`);
-        scoreB++;
-        addGameToHistory(`${document.getElementById('teamBName').value} Wins!`);
-        resetGame();
+        declareWinner('B');
     }
-
-    document.getElementById('scoreA').textContent = `${document.getElementById('teamAName').value}: ${scoreA}`;
-    document.getElementById('scoreB').textContent = `${document.getElementById('teamBName').value}: ${scoreB}`;
 }
 
 function startTimer() {
@@ -67,18 +58,43 @@ function startTimer() {
 
 function determineWinner() {
     if (ropePosition < 50) {
-        alert(`${document.getElementById('teamAName').value} Wins!`);
-        scoreA++;
-        addGameToHistory(`${document.getElementById('teamAName').value} Wins!`);
+        declareWinner('A');
     } else if (ropePosition > 50) {
-        alert(`${document.getElementById('teamBName').value} Wins!`);
-        scoreB++;
-        addGameToHistory(`${document.getElementById('teamBName').value} Wins!`);
+        declareWinner('B');
     } else {
-        alert('It\'s a tie!');
-        addGameToHistory('It\'s a tie!');
+        declareTie();
     }
-    resetGame();
+}
+
+function declareWinner(winner) {
+    const teamA = document.getElementById('teamA');
+    const teamB = document.getElementById('teamB');
+    const teamAName = document.getElementById('teamAName').value;
+    const teamBName = document.getElementById('teamBName').value;
+
+    if (winner === 'A') {
+        alert(`${teamAName} Wins!`);
+        scoreA++;
+        addGameToHistory(`${teamAName} Wins!`);
+        teamA.classList.add('winner');
+        teamB.classList.add('loser');
+    } else {
+        alert(`${teamBName} Wins!`);
+        scoreB++;
+        addGameToHistory(`${teamBName} Wins!`);
+        teamB.classList.add('winner');
+        teamA.classList.add('loser');
+    }
+
+    document.getElementById('scoreA').textContent = `${teamAName}: ${scoreA}`;
+    document.getElementById('scoreB').textContent = `${teamBName}: ${scoreB}`;
+    setTimeout(resetGame, 2000);
+}
+
+function declareTie() {
+    alert('It\'s a tie!');
+    addGameToHistory('It\'s a tie!');
+    setTimeout(resetGame, 2000);
 }
 
 function resetGame() {
@@ -86,6 +102,8 @@ function resetGame() {
     clearInterval(timerInterval);
     startTimer();
     updateRopePosition();
+    document.getElementById('teamA').classList.remove('winner', 'loser');
+    document.getElementById('teamB').classList.remove('winner', 'loser');
 }
 
 function addGameToHistory(result) {

@@ -56,6 +56,7 @@ body {
     width: 45%;
     height: 50px;
     background-color: lightgray;
+    transition: width 0.3s ease;
 }
 
 .rope {
@@ -109,4 +110,16 @@ button:hover {
     padding: 10px;
     margin: 5px 0;
     text-align: center;
+}
+
+#teamA, #teamB {
+    transition: background-color 0.3s ease;
+}
+
+.winner {
+    background-color: #28a745 !important;
+}
+
+.loser {
+    background-color: #dc3545 !important;
 }
