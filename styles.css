@@ -8,6 +8,18 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.scoreboard {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.score {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
 .game-container {
     display: flex;
     align-items: center;
